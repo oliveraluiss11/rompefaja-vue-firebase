@@ -21,6 +21,7 @@
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="Ingrese su dirección" />
                 </div>
+
                 <div>
                     <label for="reference" class="block text-sm font-medium text-gray-700">Referencia</label>
                     <input id="reference" v-model="formData.reference" type="text" required
@@ -35,45 +36,18 @@
                         placeholder="Ingrese detalles adicionales si es necesario"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Método de pago</label>
+                    <label for="paymentMethod" class="block text-sm font-medium text-gray-700">Método de Pago</label>
                     <div class="space-y-3">
-                        <!-- Plin -->
-                        <label
+                        <label v-for="method in paymentMethods" :key="method.code"
                             class="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-500">
-                            <input type="radio" v-model="formData.paymentMethod" value="plin" class="form-radio hidden"
-                                required>
-                            <div
-                                class="flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0">
-                                <div v-if="formData.paymentMethod === 'plin'"
-                                    class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></div>
-                            </div>
-                            <span class="text-gray-800">Plin</span>
-                        </label>
-
-                        <!-- Yape -->
-                        <label
-                            class="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-500">
-                            <input type="radio" v-model="formData.paymentMethod" value="yape" class="form-radio hidden"
-                                required>
-                            <div
-                                class="flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0">
-                                <div v-if="formData.paymentMethod === 'yape'"
-                                    class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></div>
-                            </div>
-                            <span class="text-gray-800">Yape</span>
-                        </label>
-
-                        <!-- Efectivo -->
-                        <label
-                            class="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-500">
-                            <input type="radio" v-model="formData.paymentMethod" value="efectivo"
+                            <input type="radio" v-model="formData.paymentMethod" :value="method.code"
                                 class="form-radio hidden" required>
                             <div
                                 class="flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0">
-                                <div v-if="formData.paymentMethod === 'efectivo'"
+                                <div v-if="formData.paymentMethod === method.code"
                                     class="w-2.5 h-2.5 bg-indigo-500 rounded-full"></div>
                             </div>
-                            <span class="text-gray-800">Efectivo</span>
+                            <span class="text-gray-800">{{ method.value }}</span>
                         </label>
                     </div>
                 </div>
@@ -143,39 +117,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const formData = ref({
-    dni: '',
-    phone: '',
-    address: '',
-    reference: '',
-    additionalDetails: '',
-    paymentMethod: '',
-    alternativeIngredients: false,
-    termsAccepted: false
-})
-
-const showTermsModal = ref(false)
-
-const submitOrder = async () => {
-    // Here you would typically send the order data to your backend
-    console.log('Order submitted:', formData.value)
-
-    // Simulate order processing
-    await new Promise(resolve => setTimeout(resolve, 2000))
-
-    // Simulate order confirmation (in a real app, this would come from the backend)
-    const orderAccepted = Math.random() > 0.2 // 80% chance of acceptance
-
-    if (orderAccepted) {
-        alert('Su pedido ha sido aceptado. Recibirá un mensaje de texto con la confirmación.')
-        router.push('/') // Redirect to home page or order confirmation page
-    } else {
-        alert('Lo sentimos, su pedido ha sido rechazado. Por favor, inténtelo de nuevo más tarde.')
-    }
-}
+import { useCheckout } from '../composables/useCheckout';
+const { formData, paymentMethods, submitOrder, showTermsModal } = useCheckout();
 </script>

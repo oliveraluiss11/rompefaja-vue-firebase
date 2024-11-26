@@ -16,7 +16,7 @@
                         <div>
                             <h3 class="font-medium">{{ item.name }}</h3>
                             <p class="text-sm text-gray-600">
-                                Papas: {{ item.customization.fries === 'fritas' ? 'Fritas' : 'Al hilo' }}
+                                Papas: {{ getFriesLabel(item.customization.fries) }}
                             </p>
                             <p class="text-sm text-gray-600">
                                 Vegetales: {{ getSelectedVegetables(item.customization.vegetables) }}
@@ -64,36 +64,43 @@
                     Proceder al pago
                 </button>
             </div>
-
         </div>
     </div>
 </template>
 
+
 <script setup lang="ts">
-import { computed } from 'vue'
-import { XIcon, MinusIcon, PlusIcon } from 'lucide-vue-next'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue';
+import { XIcon, MinusIcon, PlusIcon } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
 
-interface Vegetables {
-    lechuga: boolean;
-    tomate: boolean;
-    pepinillo: boolean;
-    cebolla: boolean;
-}
+// Opciones de personalización
+const vegetableOptions = [
+    { value: 'Lechuga', code: 'LETTUCE' },
+    { value: 'Tomate', code: 'TOMATO' },
+    { value: 'Pepinillo', code: 'PICKLE' },
+    { value: 'Cebolla', code: 'ONION' }
+];
 
-interface Sauces {
-    mayonesa: boolean;
-    mostaza: boolean;
-    tartara: boolean;
-    ketchup: boolean;
-    aji: boolean;
-    aceituna: boolean;
-}
+const sauceOptions = [
+    { value: 'Mayonesa', code: 'MAYONNAISE' },
+    { value: 'Mostaza', code: 'MUSTARD' },
+    { value: 'Tartara', code: 'TARTAR' },
+    { value: 'Ketchup', code: 'KETCHUP' },
+    { value: 'Ají', code: 'AJI' },
+    { value: 'Aceituna', code: 'OLIVE' }
+];
 
+const friesOptions = [
+    { value: 'Papas fritas', code: 'FRENCH_FRIES' },
+    { value: 'Papas al hilo', code: 'SHOESTRING_FRIES' }
+];
+
+// Interfaces
 interface Customization {
-    fries: 'fritas' | 'hilo';
-    vegetables: Vegetables;
-    sauces: Sauces;
+    fries: string; // Código de las papas (e.g., "FRENCH_FRIES")
+    vegetables: Record<string, boolean>;
+    sauces: Record<string, boolean>;
 }
 
 interface CartItem {
@@ -106,39 +113,56 @@ interface CartItem {
     quantity: number;
 }
 
+// Props
 const props = defineProps<{
-    cartItems: CartItem[]
-}>()
+    cartItems: CartItem[];
+}>();
 
+// Computed subtotal
 const subtotal = computed(() => {
-    return props.cartItems.reduce((total, item) => total + parseFloat(item.price) * item.quantity, 0)
-})
+    return props.cartItems.reduce((total, item) => total + parseFloat(item.price) * item.quantity, 0);
+});
 
-const getSelectedVegetables = (vegetables: Vegetables): string => {
+// Utility functions
+const getSelectedVegetables = (vegetables: Record<string, boolean>): string => {
     return Object.entries(vegetables)
         .filter(([, selected]) => selected)
-        .map(([name]) => name)
-        .join(', ')
-}
+        .map(([key]) => {
+            const option = vegetableOptions.find(v => v.code === key);
+            return option ? option.value : key;
+        })
+        .join(', ');
+};
 
-const getSelectedSauces = (sauces: Sauces): string => {
+const getSelectedSauces = (sauces: Record<string, boolean>): string => {
     return Object.entries(sauces)
         .filter(([, selected]) => selected)
-        .map(([name]) => name)
-        .join(', ')
-}
+        .map(([key]) => {
+            const option = sauceOptions.find(s => s.code === key);
+            return option ? option.value : key;
+        })
+        .join(', ');
+};
 
-const emit = defineEmits(['close', 'updateQuantity'])
+const getFriesLabel = (friesCode: string): string => {
+    const fries = friesOptions.find(f => f.code === friesCode);
+    return fries ? fries.value : friesCode;
+};
 
+// Emits
+const emit = defineEmits(['close', 'updateQuantity']);
+
+// Increment and decrement quantity
 const increaseQuantity = (item: CartItem) => {
-    emit('updateQuantity', item, item.quantity + 1)
-}
+    emit('updateQuantity', item, item.quantity + 1);
+};
 
 const decreaseQuantity = (item: CartItem) => {
-    if (item.quantity > 1) {
-        emit('updateQuantity', item, item.quantity - 1)
+    if (item.quantity > 0) {
+        emit('updateQuantity', item, item.quantity - 1);
     }
-}
+};
 
-const router = useRouter()
+// Router
+const router = useRouter();
 </script>
