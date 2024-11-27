@@ -2,10 +2,10 @@
     <div class="min-h-screen bg-white">
         <nav class="px-6 py-4 border-b">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="flex items-center space-x-2">
+                <router-link to="/" class="flex items-center space-x-2">
                     <UtensilsCrossedIcon class="h-6 w-6" />
-                    <span class="font-bold">La Rompe Faja</span>
-                </div>
+                    <span class="font-bold hidden sm:inline">La Rompe Faja</span>
+                </router-link>
                 <a href="/" class="text-gray-600 hover:text-black">Volver al inicio</a>
             </div>
         </nav>
@@ -56,7 +56,6 @@
 
 <script setup lang="ts">
 import { UtensilsCrossedIcon } from 'lucide-vue-next'
-
 interface Technology {
     name: string;
     logo: string;

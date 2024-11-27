@@ -15,12 +15,14 @@
                         class="flex justify-between items-center">
                         <div>
                             <h3 class="font-medium">{{ item.name }}</h3>
-                            <p class="text-sm text-gray-600">
-                                Papas: {{ getFriesLabel(item.customization.fries) }}
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                Vegetales: {{ getSelectedVegetables(item.customization.vegetables) }}
-                            </p>
+                            <template :v-if="item.category === 'BURGER'">
+                                <p class="text-sm text-gray-600">
+                                    Papas: {{ getFriesLabel(item.customization.fries) }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    Vegetales: {{ getSelectedVegetables(item.customization.vegetables) }}
+                                </p>
+                            </template>
                             <p class="text-sm text-gray-600">
                                 Salsas: {{ getSelectedSauces(item.customization.sauces) }}
                             </p>
@@ -59,7 +61,7 @@
                     </div>
                 </div>
 
-                <button @click="router.push('/checkout')"
+                <button @click="proceedToCheckout"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg mt-6 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Proceder al pago
                 </button>
@@ -73,6 +75,22 @@
 import { computed } from 'vue';
 import { XIcon, MinusIcon, PlusIcon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import { useCheckoutStore } from '@/store/CheckoutStore';
+const checkoutStore = useCheckoutStore();
+
+const proceedToCheckout = () => {
+    const items = props.cartItems.map((item) => ({
+        productId: item.id.toString(),
+        quantity: item.quantity,
+        customizations: item.customization,
+    }));
+
+    // Establecer los productos directamente en el checkoutStore
+    checkoutStore.setItems(items);
+
+    // Redirigir a la página de checkout
+    router.push('/checkout');
+};
 
 // Opciones de personalización
 const vegetableOptions = [
@@ -108,6 +126,7 @@ interface CartItem {
     name: string;
     description: string;
     price: string;
+    category: string;
     image: string;
     customization: Customization;
     quantity: number;
@@ -165,4 +184,6 @@ const decreaseQuantity = (item: CartItem) => {
 
 // Router
 const router = useRouter();
+
+
 </script>

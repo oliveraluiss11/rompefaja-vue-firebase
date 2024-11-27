@@ -1,13 +1,12 @@
 import { ref, computed } from 'vue'
 import { createGetAllProducts } from '@/product/application/GetAllProducts'
-import { productLocalRepositoryImpl } from '@/product/infrastructure/ProductLocalRepositoryImpl'
 import type { ProductDto } from '@/product/domain/model/ProductDto'
-
+import { productMockRepositoryImpl } from '@/product/infrastructure/ProductLocalRepositoryImpl'
 export function useProducts() {
   const products = ref<ProductDto[]>([])
   const searchQuery = ref('')
 
-  const getAllProductsUseCase = createGetAllProducts(productLocalRepositoryImpl)
+  const getAllProductsUseCase = createGetAllProducts(productMockRepositoryImpl)
 
   const loadProducts = async () => {
     products.value = await getAllProductsUseCase.execute()

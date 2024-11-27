@@ -14,7 +14,8 @@
 
                 <!-- Product Info -->
                 <div class="flex items-center gap-4 my-6" v-if="product">
-                    <img :src="product.image" :alt="product.name" class="w-24 h-24 object-cover rounded-lg border" />
+                    <img :src="product.image" :alt="product.name" class="w-24 h-24 object-cover rounded-lg border"
+                        loading="lazy" />
                     <div>
                         <h3 class="font-semibold text-lg text-gray-800">{{ product.name }}</h3>
                         <p class="text-sm text-gray-600">{{ product.description }}</p>

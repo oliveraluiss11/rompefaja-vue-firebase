@@ -1,4 +1,4 @@
-import type { ProductDto } from './ProductDTO'
+import type { ProductDto } from './ProductDto'
 
 export interface ProductListResponse {
   products: Array<ProductDto>

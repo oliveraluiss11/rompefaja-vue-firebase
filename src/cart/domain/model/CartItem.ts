@@ -10,6 +10,7 @@ export interface CartItem {
   description: string
   price: string
   image: string
+  category: string
   customization: Customization // Tipo explícito para personalización
   quantity: number
 }

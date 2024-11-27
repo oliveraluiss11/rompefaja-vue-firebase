@@ -11,7 +11,7 @@
                 </div>
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700">Celular</label>
-                    <input id="phone" v-model="formData.phone" type="tel" pattern="9\d{8}" required
+                    <input id="phone" v-model="formData.cellphone" type="tel" pattern="9\d{8}" required
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="Ingrese su número de celular (9 dígitos)" />
                 </div>
@@ -68,8 +68,11 @@
                     </label>
                 </div>
                 <div>
-                    <button type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <button type="submit" :disabled="!formData.termsAccepted" :class="{
+                        'bg-blue-600 hover:bg-blue-700': formData.termsAccepted,
+                        'bg-gray-400 cursor-not-allowed': !formData.termsAccepted,
+                    }"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Realizar Pedido
                     </button>
                 </div>
@@ -113,10 +116,49 @@
                 </div>
             </div>
         </div>
+
+        <!-- OTP Modal -->
+        <div v-if="showOtpModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-auto overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Verificación OTP</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        Se ha enviado un código de verificación a su número de celular. Por favor, ingréselo a
+                        continuación:
+                    </p>
+                    <div class="mb-4">
+                        <input v-model="localOtpCode" type="text" inputmode="numeric" pattern="\d{6}" maxlength="6"
+                            required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Ingrese el código OTP" />
+                    </div>
+                    <p v-if="otpError" class="text-red-500 text-sm mb-4">{{ otpError }}</p>
+                    <div class="flex justify-between">
+                        <button @click="verifyAndSubmitOrder(localOtpCode)"
+                            class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Verificar y Enviar Pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useCheckout } from '../composables/useCheckout';
-const { formData, paymentMethods, submitOrder, showTermsModal } = useCheckout();
+import { ref } from 'vue';
+
+// Variables reactivas locales
+const localOtpCode = ref('');
+
+const {
+    formData,
+    submitOrder,
+    showOtpModal,
+    showTermsModal,
+    otpError,
+    verifyAndSubmitOrder,
+    paymentMethods,
+} = useCheckout();
 </script>
