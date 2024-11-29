@@ -26,7 +26,7 @@ const navigateTo = (path: string) => {
         </div>
 
         <div>
-          <a href="/products" class="px-4 py-1.5 rounded-full border border-black">
+          <a @click.prevent="navigateTo('/products')" class="px-4 py-1.5 rounded-full bg-blue-500 text-white ">
             Ordenar ahora
           </a>
         </div>
@@ -34,7 +34,7 @@ const navigateTo = (path: string) => {
     </nav>
 
     <!-- Hero -->
-    <div class="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
+    <div class="max-w-4xl mx-auto px-6 pt-8 pb-16 text-center">
       <h1 class="text-[80px] leading-none font-bold mb-6">
         tu comida favorita
         <br />

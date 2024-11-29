@@ -1,7 +1,7 @@
 import { addDoc, collection } from 'firebase/firestore'
 import type { OrderRequest } from '../domain/model/OrderRequest'
 import type { OrderRepository } from '../domain/repository/OrderRepository'
-import { db } from '@/firebase'
+import { db } from '@/common/config/firebase'
 
 export const orderFirebaseRepositoryImpl: OrderRepository = {
   createOrder: async function (orderRequest: OrderRequest): Promise<void> {

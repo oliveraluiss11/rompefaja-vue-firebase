@@ -85,7 +85,8 @@
                 <div class="p-6">
                     <h3 class="text-lg font-medium mb-4"
                         :class="notificationType === 'success' ? 'text-green-600' : 'text-red-600'">
-                        {{ notificationType === 'success' ? 'Pedido Exitoso' : 'Error en el Pedido' }}
+                        {{ notificationType === 'success' ? '¡Gracias por comprar en La Rompe Faja!' :
+                            '¡Vaya! Algo salió mal al crear tu pedido.' }}
                     </h3>
                     <div class="prose prose-sm max-h-96 overflow-y-auto mb-4">
                         <p>{{ notificationMessage }}</p>

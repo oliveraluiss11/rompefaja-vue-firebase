@@ -2,9 +2,10 @@ import { ref } from 'vue'
 import { getPaymentMethodsUseCase } from '@/checkout/application/GetPaymentMethods'
 import type { PaymentMethod } from '@/checkout/domain/model/PaymentMethod'
 import { useRouter } from 'vue-router'
-import { useCheckoutStore } from '@/store/CheckoutStore'
+import { useCheckoutStore } from '@/checkout/presentation/store/CheckoutStore'
 import { createOrderUseCase } from '@/checkout/application/CreateOrder'
 import { orderFirebaseRepositoryImpl } from '@/checkout/infrastructure/OrderFirebaseRepositoryImpl'
+import { validationBusinessLocalRepositoryImpl } from '@/business/infrastructure/ValidationBusinessLocalRepositoryImpl'
 
 interface NotificationType {
   success: 'success'
@@ -43,8 +44,10 @@ export function useCheckout() {
   // Verificar OTP y proceder con el pedido
   const verifyAndSubmitOrder = async () => {
     checkoutStore.setCheckoutData(formData.value)
-    const createOrder = createOrderUseCase(orderFirebaseRepositoryImpl)
-    console.info(checkoutStore.state)
+    const createOrder = createOrderUseCase(
+      orderFirebaseRepositoryImpl,
+      validationBusinessLocalRepositoryImpl,
+    )
     createOrder
       .execute(checkoutStore.state)
       .then(() => {

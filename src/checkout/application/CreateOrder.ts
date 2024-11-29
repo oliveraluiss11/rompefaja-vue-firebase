@@ -1,3 +1,4 @@
+import type { BusinessRepository } from '@/business/domain/repository/ValidationBusinessRepository'
 import type { OrderRequest } from '../domain/model/OrderRequest'
 import type { OrderRepository } from '../domain/repository/OrderRepository'
 
@@ -5,8 +6,14 @@ export interface CreateOrderUseCase {
   execute(request: OrderRequest): Promise<void>
 }
 
-export const createOrderUseCase = (orderRepository: OrderRepository): CreateOrderUseCase => ({
+export const createOrderUseCase = (
+  orderRepository: OrderRepository,
+  businessRepository: BusinessRepository,
+): CreateOrderUseCase => ({
   async execute(request: OrderRequest): Promise<void> {
+    if (businessRepository.isBusinessClosed()) {
+      throw new Error('El negocio está cerrado. No se pueden realizar pedidos en este momento.')
+    }
     // Calcular precios en paralelo
     let subtotal = 0.0 as number
 

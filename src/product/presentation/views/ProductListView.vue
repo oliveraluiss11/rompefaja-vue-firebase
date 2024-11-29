@@ -17,15 +17,46 @@
                     </div>
                 </div>
 
-                <button class="p-2 relative" @click="showCartModal = true">
+                <button
+                    class="p-3 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    :class="[
+                        businessValidationStore.isClosed
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            : 'text-dark-500 hover:text-blue-600 active:scale-95 focus:ring-blue-500'
+                    ]" @click="showCartModal = true" :disabled="businessValidationStore.isClosed"
+                    :aria-label="businessValidationStore.isClosed ? 'Carrito no disponible' : 'Abrir carrito'">
                     <ShoppingCartIcon class="h-6 w-6" />
-                    <span v-if="cartItemCount > 0"
-                        class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                        {{ cartItemCount }}
-                    </span>
+                    <transition enter-active-class="transition ease-out duration-300"
+                        enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100"
+                        leave-active-class="transition ease-in duration-200"
+                        leave-from-class="transform opacity-100 scale-100"
+                        leave-to-class="transform opacity-0 scale-95">
+                        <span v-if="cartItemCount > 0"
+                            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            {{ cartItemCount }}
+                        </span>
+                    </transition>
                 </button>
             </nav>
-
+            <!-- Mensaje de tienda cerrada -->
+            <div v-if="businessValidationStore.isClosed"
+                class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded-md shadow-md"
+                role="alert">
+                <div class="flex items-center mb-2">
+                    <ClockIcon class="h-6 w-6 mr-2" />
+                    <p class="font-bold">Fuera de horario de atención</p>
+                </div>
+                <p class="mb-2">Lo sentimos, actualmente estamos fuera de nuestro horario de atención. Volveremos pronto
+                    para atenderte.</p>
+                <div class="mt-2">
+                    <p class="font-semibold">Nuestros horarios de atención son:</p>
+                    <ul class="list-disc list-inside mt-1">
+                        <li>Lunes, Miércoles, Jueves: 6:00 PM - 12:00 AM</li>
+                        <li>Viernes, Sábado, Domingo: 6:00 PM - 1:00 AM</li>
+                        <li>Martes: Cerrado</li>
+                    </ul>
+                </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                 <div v-for="product in filteredProducts" :key="product.id"
                     class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 flex"
@@ -37,7 +68,7 @@
                         <!-- Etiqueta opcional -->
                         <span v-if="product.category"
                             class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            {{ product.category }}
+                            {{ formatCategory(product.category) }}
                         </span>
                     </div>
 
@@ -46,7 +77,7 @@
                         <!-- Título e ícono -->
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <h3 class="text-lg font-semibold text-gray-800 truncate">{{ product.name }}</h3>
+                                <h3 class="text-md font-semibold text-gray-800 truncate">{{ product.name }}</h3>
                                 <LeafIcon class="h-5 w-5 text-green-500" />
                             </div>
                             <!-- Descripción -->
@@ -119,7 +150,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { UtensilsCrossedIcon, SearchIcon, ShoppingCartIcon, LeafIcon } from 'lucide-vue-next';
+import { UtensilsCrossedIcon, SearchIcon, ShoppingCartIcon, LeafIcon, ClockIcon } from 'lucide-vue-next';
 import CartModal from '@/cart/presentation/component/CartModal.vue';
 import { useProducts } from '../composable/UseProducts';
 import type { ProductDto } from '@/product/domain/model/ProductDto';
@@ -127,6 +158,20 @@ import { useCart } from '@/cart/presentation/composable/useCart';
 import type { Customization } from '@/cart/domain/model/CartItem';
 import { useOptions } from '../composable/UseOptions';
 import CustomizationModal from '../component/CustomizationModal.vue';
+import { useBusinessValidationStore } from '@/common/store/businessValidationStore';
+
+const businessValidationStore = useBusinessValidationStore();
+
+
+
+const formatCategory = (category: string): string => {
+    const categories = {
+        'BURGER': 'Hamburguesa',
+        'CHICKEN_WINGS': 'Alitas',
+        'FRIED_CHICKEN': 'Pollo Broaster'
+    } as Record<string, string>
+    return categories[category] || category
+}
 
 const { cartItems, cartItemCount, addToCart, updateCartItemQuantity } = useCart();
 const { vegetableOptions, sauceOptions, friesOptions } = useOptions();
@@ -208,6 +253,4 @@ const handleAddToCart = () => {
         closeModal();
     }
 };
-
-
 </script>

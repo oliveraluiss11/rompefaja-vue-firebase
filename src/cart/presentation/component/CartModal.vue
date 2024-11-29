@@ -75,7 +75,7 @@
 import { computed } from 'vue';
 import { XIcon, MinusIcon, PlusIcon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
-import { useCheckoutStore } from '@/store/CheckoutStore';
+import { useCheckoutStore } from '@/checkout/presentation/store/CheckoutStore';
 const checkoutStore = useCheckoutStore();
 
 const proceedToCheckout = () => {

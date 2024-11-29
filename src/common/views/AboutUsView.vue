@@ -76,7 +76,7 @@ const technologies: Technology[] = [
         name: 'TailwindCSS',
         logo: 'https://raw.githubusercontent.com/gilbarbara/logos/main/logos/tailwindcss-icon.svg'
     },
-    {
+    /*{
         name: 'Spring',
         logo: 'https://raw.githubusercontent.com/gilbarbara/logos/main/logos/spring-icon.svg'
     },
@@ -95,7 +95,7 @@ const technologies: Technology[] = [
     {
         name: 'Render',
         logo: 'https://firebasestorage.googleapis.com/v0/b/market-express-dev.appspot.com/o/team%2Frender-logo.png?alt=media&token=6fbafd74-678d-4698-9b94-f7954a0026e8'
-    },
+    },*/
     {
         name: 'GitHub',
         logo: 'https://raw.githubusercontent.com/gilbarbara/logos/main/logos/github-icon.svg'

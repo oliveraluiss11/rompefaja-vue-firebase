@@ -1,7 +1,7 @@
 import type { ProductDto } from '../domain/model/ProductDto'
 import type { ProductRepository } from '../domain/repository/ProductRepository'
-import axiosInstance from '../../axiosInstance'
 import type { ProductListResponse } from '../domain/model/ProductListResponse'
+import axiosInstance from '@/common/config/axiosInstance'
 export const productMockRepositoryImpl: ProductRepository = {
   // Obtener todos los productos
   getAllProducts: async (): Promise<ProductDto[]> => {
@@ -10,7 +10,6 @@ export const productMockRepositoryImpl: ProductRepository = {
       if (response.status !== 200) {
         throw new Error('Error al obtener los productos')
       }
-      console.log(response.data)
       const dataResponse = response.data as ProductListResponse
       return dataResponse.products
     } catch (error) {
