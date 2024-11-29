@@ -17,7 +17,8 @@
                 <h2 class="text-2xl font-semibold mb-6">El Equipo detrás de La Rompe Faja</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="bg-gray-50 p-6 rounded-lg flex items-center space-x-4">
-                        <img src="" alt="Olenca Medina" class="w-24 h-24 rounded-full object-cover" />
+                        <img src="https://firebasestorage.googleapis.com/v0/b/market-express-dev.appspot.com/o/profile%20default%2F3d-illustration-human-avatar-profile_23-2150671140.avif?alt=media&token=72dcc1e4-dc55-4b62-ae77-19d41baf37b7"
+                            alt="Olenca Medina" class="w-24 h-24 rounded-full object-cover" />
                         <div>
                             <h3 class="text-xl font-semibold mb-2">Olenca Medina</h3>
                             <p class="text-gray-600 mb-2">Gerente General</p>
