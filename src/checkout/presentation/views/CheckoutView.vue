@@ -78,7 +78,25 @@
                 </div>
             </form>
         </div>
-
+        <!-- Modal de notificación -->
+        <div v-if="showNotificationModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-auto overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium mb-4"
+                        :class="notificationType === 'success' ? 'text-green-600' : 'text-red-600'">
+                        {{ notificationType === 'success' ? 'Pedido Exitoso' : 'Error en el Pedido' }}
+                    </h3>
+                    <div class="prose prose-sm max-h-96 overflow-y-auto mb-4">
+                        <p>{{ notificationMessage }}</p>
+                    </div>
+                    <button @click="closeNotificationModal"
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        {{ notificationType === 'success' ? 'Ir al inicio' : 'Cerrar' }}
+                    </button>
+                </div>
+            </div>
+        </div>
         <!-- Terms and Conditions Modal -->
         <div v-if="showTermsModal"
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -126,5 +144,9 @@ const {
     showTermsModal,
     verifyAndSubmitOrder,
     paymentMethods,
+    showNotificationModal,
+    notificationType,
+    notificationMessage,
+    closeNotificationModal
 } = useCheckout();
 </script>

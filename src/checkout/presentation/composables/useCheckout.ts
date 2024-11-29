@@ -6,6 +6,10 @@ import { useCheckoutStore } from '@/store/CheckoutStore'
 import { createOrderUseCase } from '@/checkout/application/CreateOrder'
 import { orderFirebaseRepositoryImpl } from '@/checkout/infrastructure/OrderFirebaseRepositoryImpl'
 
+interface NotificationType {
+  success: 'success'
+  error: 'error'
+}
 export function useCheckout() {
   const router = useRouter()
   const checkoutStore = useCheckoutStore()
@@ -31,6 +35,11 @@ export function useCheckout() {
 
   const showTermsModal = ref(false)
 
+  // Modal de notificación
+  const showNotificationModal = ref<boolean>(false)
+  const notificationMessage = ref<string>('')
+  const notificationType = ref<keyof NotificationType>('success')
+
   // Verificar OTP y proceder con el pedido
   const verifyAndSubmitOrder = async () => {
     checkoutStore.setCheckoutData(formData.value)
@@ -39,12 +48,16 @@ export function useCheckout() {
     createOrder
       .execute(checkoutStore.state)
       .then(() => {
-        alert('Su pedido ha sido aceptado. Recibirá un mensaje de texto con la confirmación.')
-        resetCheckout() // Limpiar el estado
-        router.push('/') // Redirigir al inicio
+        notificationMessage.value =
+          'Su pedido ha sido registrado. Revisaremos su solicitud lo más pronto posible. ¡Gracias por realizar su pedido en Rompe Faja Food!'
+        notificationType.value = 'success'
+        showNotificationModal.value = true
       })
       .catch((error: Error) => {
-        alert(error.message)
+        notificationMessage.value =
+          error instanceof Error ? error.message : 'Ha ocurrido un error al procesar su pedido.'
+        notificationType.value = 'error'
+        showNotificationModal.value = true
       })
   }
 
@@ -65,6 +78,14 @@ export function useCheckout() {
     otpError.value = ''
   }
 
+  const closeNotificationModal = () => {
+    showNotificationModal.value = false
+    if (notificationType.value === 'success') {
+      resetCheckout() // Limpiar el estado
+      router.push('/') // Redirigir al inicio
+    }
+  }
+
   return {
     formData,
     paymentMethods,
@@ -73,5 +94,9 @@ export function useCheckout() {
     otpError,
     verifyAndSubmitOrder,
     resetCheckout,
+    showNotificationModal,
+    notificationMessage,
+    notificationType,
+    closeNotificationModal,
   }
 }
