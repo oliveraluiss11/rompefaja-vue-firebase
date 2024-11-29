@@ -25,10 +25,11 @@ const navigateTo = (path: string) => {
           <a @click.prevent="navigateTo('/about')" class="text-gray-600 cursor-pointer">Nosotros</a>
         </div>
 
-        <div>
-          <a @click.prevent="navigateTo('/products')" class="px-4 py-1.5 rounded-full bg-blue-500 text-white ">
+        <div class="flex justify-center items-center">
+          <button @click.prevent="navigateTo('/products')"
+            class="px-6 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-xs hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 active:scale-95 transition-all duration-300">
             Ordenar ahora
-          </a>
+          </button>
         </div>
       </div>
     </nav>
@@ -82,19 +83,6 @@ const navigateTo = (path: string) => {
           <div class="bg-green-50 p-4 rounded-2xl">
             <p class="font-medium">Tiempo de entrega: 15-30 minutos</p>
           </div>
-
-          <div class="bg-purple-100 p-4 rounded-2xl">
-            <div class="flex items-center gap-2 mb-2">
-              <div class="w-8 h-8 rounded-full bg-purple-200"></div>
-              <span class="font-medium">Último pedido</span>
-              <span class="text-sm text-gray-500">hace 5m</span>
-            </div>
-            <div class="space-y-2">
-              <p class="font-medium">Hamburguesa Rompe Faja</p>
-              <p class="text-sm text-gray-600">Estado: En preparación</p>
-            </div>
-          </div>
-
           <div class="bg-gray-100 p-4 rounded-2xl">
             <h3 class="font-medium mb-2">Nuestra ubicación</h3>
             <p class="text-sm text-gray-600">
