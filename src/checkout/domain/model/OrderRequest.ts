@@ -21,4 +21,5 @@ export interface OrderRequest {
   paymentMethod: string
   alternativeIngredients: boolean
   termsAccepted: boolean
+  otp: string
 }

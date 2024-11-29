@@ -19,7 +19,7 @@ const navigateTo = (path: string) => {
         </div>
 
         <div class="hidden md:flex space-x-6">
-          <a @click.prevent="navigateTo('/products')" class="text-gray-600 cursor-pointer">Ver Productos</a>
+          <a @click.prevent="navigateTo('/products')" class="text-gray-600 cursor-pointer">Tienda</a>
           <a @click.prevent="navigateTo('/faq')" class="text-gray-600 cursor-pointer">FAQ</a>
           <a @click.prevent="navigateTo('/location')" class="text-gray-600 cursor-pointer">Local</a>
           <a @click.prevent="navigateTo('/about')" class="text-gray-600 cursor-pointer">Nosotros</a>

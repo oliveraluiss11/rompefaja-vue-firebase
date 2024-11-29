@@ -5,6 +5,8 @@ import { useRouter } from 'vue-router'
 import { useCheckoutStore } from '@/store/CheckoutStore'
 import { createGenerateOtpUseCase } from '@/checkout/application/GenerateOtp'
 import { otpMockRepositoryImpl } from '@/checkout/infrastructure/OtpMockRepositoryImpl'
+import { createOrderUseCase } from '@/checkout/application/CreateOrder'
+import { orderMockRepositoryImpl } from '@/checkout/infrastructure/OrderMockRepositoryImpl'
 
 export function useCheckout() {
   const router = useRouter()
@@ -54,33 +56,26 @@ export function useCheckout() {
   // Verificar OTP y proceder con el pedido
   const verifyAndSubmitOrder = async (otpCode: string) => {
     console.log('Verificando OTP:', otpCode)
+    checkoutStore.setOtp(otpCode)
 
-    // Simular validación del OTP
-    if (otpCode === '1234') {
-      otpError.value = ''
-      alert('OTP verificado correctamente. Procesando pedido...')
-
-      // Simular envío del pedido
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      const orderAccepted = Math.random() > 0.2 // Simula un 80% de éxito
-
-      if (orderAccepted) {
+    const createOrder = createOrderUseCase(orderMockRepositoryImpl)
+    console.info(checkoutStore.state)
+    createOrder
+      .execute(checkoutStore.state)
+      .then(() => {
         alert(
           'Su pedido ha sido aceptado. Recibirá un mensaje de texto con la confirmación.' +
             JSON.stringify(checkoutStore.state, null, 2),
         )
-
         resetCheckout() // Limpiar el estado
         router.push('/') // Redirigir al inicio
-      } else {
-        alert('Lo sentimos, su pedido ha sido rechazado. Por favor, inténtelo de nuevo más tarde.')
-      }
-
-      showOtpModal.value = false // Cierra el modal
-    } else {
-      otpError.value = 'El código OTP ingresado es incorrecto.'
-    }
+      })
+      .catch((error: Error) => {
+        alert(error.message)
+      })
+      .finally(() => {
+        showOtpModal.value = false
+      })
   }
 
   // Limpiar los campos del formulario y el estado del store
