@@ -18,7 +18,7 @@
                 </div>
 
                 <button
-                    class="p-3 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    class="relative p-3 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
                     :class="[
                         businessValidationStore.isClosed
                             ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
