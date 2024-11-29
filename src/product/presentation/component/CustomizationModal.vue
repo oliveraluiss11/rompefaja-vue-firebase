@@ -1,6 +1,6 @@
 <template>
     <div v-if="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-auto overflow-hidden transform transition-transform scale-95 opacity-0"
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm sm:max-w-lg mx-auto overflow-hidden transform transition-transform scale-95 opacity-0 "
             :class="{ 'scale-100 opacity-100': show }">
             <div class="p-6">
                 <!-- Header -->
@@ -38,7 +38,14 @@
         </div>
     </div>
 </template>
-
+<style>
+.modal {
+    max-height: 90vh;
+    /* Asegura que el modal nunca sea más alto que la pantalla */
+    overflow-y: auto;
+    /* Permite el desplazamiento vertical */
+}
+</style>
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 import { XIcon } from 'lucide-vue-next';
