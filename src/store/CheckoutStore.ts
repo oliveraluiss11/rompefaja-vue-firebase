@@ -15,16 +15,11 @@ export const useCheckoutStore = defineStore('checkout', () => {
     paymentMethod: '',
     alternativeIngredients: false,
     termsAccepted: false,
-    otp: '',
   })
 
   // Establecer productos desde CartModal
   const setItems = (newItems: CheckoutItem[]) => {
     state.value.items = newItems
-  }
-  // Establecer el valor de otp
-  const setOtp = (otpCode: string) => {
-    state.value.otp = otpCode
   }
   // Establecer los datos restantes del checkout (formData) desde /checkout
   const setCheckoutData = (data: Partial<Omit<OrderRequest, 'items'>>) => {
@@ -42,7 +37,6 @@ export const useCheckoutStore = defineStore('checkout', () => {
       paymentMethod: '',
       alternativeIngredients: false,
       termsAccepted: false,
-      otp: '',
     }
   }
 
@@ -51,6 +45,5 @@ export const useCheckoutStore = defineStore('checkout', () => {
     setItems,
     setCheckoutData,
     clearState,
-    setOtp,
   }
 })

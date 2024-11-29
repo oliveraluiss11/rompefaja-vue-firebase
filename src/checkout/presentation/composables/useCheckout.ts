@@ -3,10 +3,8 @@ import { getPaymentMethodsUseCase } from '@/checkout/application/GetPaymentMetho
 import type { PaymentMethod } from '@/checkout/domain/model/PaymentMethod'
 import { useRouter } from 'vue-router'
 import { useCheckoutStore } from '@/store/CheckoutStore'
-import { createGenerateOtpUseCase } from '@/checkout/application/GenerateOtp'
-import { otpMockRepositoryImpl } from '@/checkout/infrastructure/OtpMockRepositoryImpl'
 import { createOrderUseCase } from '@/checkout/application/CreateOrder'
-import { orderMockRepositoryImpl } from '@/checkout/infrastructure/OrderMockRepositoryImpl'
+import { orderFirebaseRepositoryImpl } from '@/checkout/infrastructure/OrderFirebaseRepositoryImpl'
 
 export function useCheckout() {
   const router = useRouter()
@@ -33,48 +31,20 @@ export function useCheckout() {
 
   const showTermsModal = ref(false)
 
-  // Abrir el modal OTP
-  const submitOrder = async () => {
-    try {
-      // Guardar los datos en el store
-      checkoutStore.setCheckoutData(formData.value)
-      // Llamar al caso de uso para generar OTP
-      const generateOtpUseCase = createGenerateOtpUseCase(otpMockRepositoryImpl)
-
-      await generateOtpUseCase.execute({
-        cellphone: checkoutStore.state.cellphone,
-        purpose: 'ORDER_REQUEST',
-      })
-      // Si se genera exitosamente, abre el modal OTP
-      showOtpModal.value = true
-    } catch (error) {
-      console.error('Error al generar OTP:', error)
-      alert('No se pudo generar el OTP. Por favor, inténtalo nuevamente.')
-    }
-  }
-
   // Verificar OTP y proceder con el pedido
-  const verifyAndSubmitOrder = async (otpCode: string) => {
-    console.log('Verificando OTP:', otpCode)
-    checkoutStore.setOtp(otpCode)
-
-    const createOrder = createOrderUseCase(orderMockRepositoryImpl)
+  const verifyAndSubmitOrder = async () => {
+    checkoutStore.setCheckoutData(formData.value)
+    const createOrder = createOrderUseCase(orderFirebaseRepositoryImpl)
     console.info(checkoutStore.state)
     createOrder
       .execute(checkoutStore.state)
       .then(() => {
-        alert(
-          'Su pedido ha sido aceptado. Recibirá un mensaje de texto con la confirmación.' +
-            JSON.stringify(checkoutStore.state, null, 2),
-        )
+        alert('Su pedido ha sido aceptado. Recibirá un mensaje de texto con la confirmación.')
         resetCheckout() // Limpiar el estado
         router.push('/') // Redirigir al inicio
       })
       .catch((error: Error) => {
         alert(error.message)
-      })
-      .finally(() => {
-        showOtpModal.value = false
       })
   }
 
@@ -101,7 +71,6 @@ export function useCheckout() {
     showTermsModal,
     showOtpModal,
     otpError,
-    submitOrder,
     verifyAndSubmitOrder,
     resetCheckout,
   }

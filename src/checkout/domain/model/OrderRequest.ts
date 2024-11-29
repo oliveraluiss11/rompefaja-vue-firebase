@@ -7,6 +7,7 @@ export interface Customization {
 
 export interface CheckoutItem {
   productId: string
+  price: number
   quantity: number
   customizations: Customization
 }
@@ -21,5 +22,4 @@ export interface OrderRequest {
   paymentMethod: string
   alternativeIngredients: boolean
   termsAccepted: boolean
-  otp: string
 }

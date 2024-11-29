@@ -82,6 +82,7 @@ const proceedToCheckout = () => {
     const items = props.cartItems.map((item) => ({
         productId: item.id.toString(),
         quantity: item.quantity,
+        price: Number(item.price),
         customizations: item.customization,
     }));
 
