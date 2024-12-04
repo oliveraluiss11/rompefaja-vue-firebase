@@ -188,7 +188,6 @@ const customization = ref<Customization>({
         LETTUCE: false,
         TOMATO: false,
         PICKLE: false,
-        ONION: false
     },
     sauces: {
         MAYONNAISE: false,
@@ -229,7 +228,6 @@ const openModal = (product: ProductDto) => {
             LETTUCE: false,
             TOMATO: false,
             PICKLE: false,
-            ONION: false
         },
         sauces: {
             MAYONNAISE: false,

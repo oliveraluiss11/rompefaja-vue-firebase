@@ -10,7 +10,6 @@ export const orderFirebaseRepositoryImpl: OrderRepository = {
       const response = await addDoc(collection(db, 'orders'), {
         ...orderRequest, // Propiedades del objeto orderRequest
         createdAt: new Date(), // Puedes añadir campos adicionales si es necesario
-        status: 'PENDING',
       })
 
       console.log('Orden creada con ID:', response.id) // El ID del documento creado

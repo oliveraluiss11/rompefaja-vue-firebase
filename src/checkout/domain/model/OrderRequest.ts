@@ -5,8 +5,14 @@ export interface Customization {
   sauces: Record<string, boolean>
 }
 
+export interface OrderStatus {
+  status: 'PENDING' | 'ACCEPTED' | 'DELIVERED' | 'CANCELLED'
+  date: Date
+}
+
 export interface CheckoutItem {
   productId: string
+  productName: string
   price: number
   quantity: number
   customizations: Customization
@@ -22,4 +28,5 @@ export interface OrderRequest {
   paymentMethod: string
   alternativeIngredients: boolean
   termsAccepted: boolean
+  statusHistory?: OrderStatus[]
 }

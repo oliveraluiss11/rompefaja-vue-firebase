@@ -1,5 +1,5 @@
 import type { BusinessRepository } from '@/business/domain/repository/ValidationBusinessRepository'
-import type { OrderRequest } from '../domain/model/OrderRequest'
+import type { OrderRequest, OrderStatus } from '../domain/model/OrderRequest'
 import type { OrderRepository } from '../domain/repository/OrderRepository'
 
 export interface CreateOrderUseCase {
@@ -25,10 +25,16 @@ export const createOrderUseCase = (
 
     // Total
     const total = subtotal + shippingCost
-
+    const statusHistory = [
+      {
+        status: 'PENDING',
+        date: new Date(),
+      },
+    ] as OrderStatus[]
     // Agregar los montos al request para guardarlo en Firestore
     const extendedRequest = {
       ...request,
+      statusHistory,
       subtotal,
       shippingCost,
       total,

@@ -5,6 +5,14 @@ export const validationBusinessLocalRepositoryImpl: BusinessRepository = {
     // Obtener la fecha y hora actual en la zona horaria de Lima (Perú)
     const now = new Date()
 
+    // Si la bandera está habilitada, pero estamos fuera del horario específico, el negocio sigue cerrado
+    const isEnabled = import.meta.env.VITE_FEATURE_ENABLED === 'true'
+    console.info('Activo desde la variable de entorno: ' + isEnabled)
+
+    if (isEnabled) {
+      return false
+    }
+
     const peruTimeParts = new Intl.DateTimeFormat('es-PE', {
       timeZone: 'America/Lima',
       hour: '2-digit',
@@ -74,10 +82,6 @@ export const validationBusinessLocalRepositoryImpl: BusinessRepository = {
       console.info('Negocio cerrado por estar fuera del horario')
       return true
     }
-
-    // Si la bandera está habilitada, pero estamos fuera del horario específico, el negocio sigue cerrado
-    const isEnabled = import.meta.env.VITE_FEATURE_ENABLED === 'true'
-    console.info('Activo desde la variable de entorno: ' + isEnabled)
 
     return false // Negocio abierto
   },

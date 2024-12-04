@@ -3,7 +3,6 @@ export function useOptions() {
     { value: 'Lechuga', code: 'LETTUCE' },
     { value: 'Tomate', code: 'TOMATO' },
     { value: 'Pepinillo', code: 'PICKLE' },
-    { value: 'Cebolla', code: 'ONION' },
   ]
 
   const sauceOptions = [

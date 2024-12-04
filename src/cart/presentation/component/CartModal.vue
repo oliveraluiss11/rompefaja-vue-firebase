@@ -81,6 +81,7 @@ const checkoutStore = useCheckoutStore();
 const proceedToCheckout = () => {
     const items = props.cartItems.map((item) => ({
         productId: item.id.toString(),
+        productName: item.name,
         quantity: item.quantity,
         price: Number(item.price),
         customizations: item.customization,
@@ -97,8 +98,7 @@ const proceedToCheckout = () => {
 const vegetableOptions = [
     { value: 'Lechuga', code: 'LETTUCE' },
     { value: 'Tomate', code: 'TOMATO' },
-    { value: 'Pepinillo', code: 'PICKLE' },
-    { value: 'Cebolla', code: 'ONION' }
+    { value: 'Pepinillo', code: 'PICKLE' }
 ];
 
 const sauceOptions = [
